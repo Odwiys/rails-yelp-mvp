@@ -5,3 +5,21 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+puts 'Refreshing database...'
+Restaurant.destroy_all
+
+require 'faker'
+puts 'Creating 5 fake restaurants'
+5.times do
+  categories = %w(chinese italian japanese french belgian)
+  new_restaurant = Restaurant.new(
+    name: Faker::Restaurant.name,
+    address: Faker::Address.street_address,
+    phone_number: Faker::PhoneNumber.cell_phone_in_e164,
+    category: categories.sample
+  )
+  p new_restaurant.valid? # => should be `true`
+  p new_restaurant.errors
+  new_restaurant.save    # => should not display rollback warnings
+end
